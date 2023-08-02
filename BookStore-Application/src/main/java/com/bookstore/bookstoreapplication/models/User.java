@@ -1,6 +1,6 @@
 package com.bookstore.bookstoreapplication.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 

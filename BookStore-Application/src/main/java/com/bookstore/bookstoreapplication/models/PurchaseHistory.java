@@ -1,7 +1,8 @@
 package com.bookstore.bookstoreapplication.models;
-import jakarta.persistence.*;
+
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
