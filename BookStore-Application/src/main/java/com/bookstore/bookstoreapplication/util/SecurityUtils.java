@@ -10,7 +10,7 @@ public class SecurityUtils {
     public static final String AUTH_HEADER = "authorization";
     public static final String AUTH_TOKEN_TYPE = "Bearer";
     public static final String AUTH_TOKEN_PREFIX = AUTH_TOKEN_TYPE + " ";
-    public static SimpleGrantedAuthority convertAuthority(String role){
+    public static SimpleGrantedAuthority convertToAuthority(String role){
         String formattedRole = role.startsWith(ROLE_PREFIX) ? role: ROLE_PREFIX + role;
         return new SimpleGrantedAuthority(formattedRole);
     }
