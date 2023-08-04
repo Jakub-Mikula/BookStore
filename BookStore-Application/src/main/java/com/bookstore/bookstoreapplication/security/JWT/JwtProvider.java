@@ -27,18 +27,17 @@ public class JwtProvider implements IJwtProvider {
     private Long JWT_EXPIRATION_IN_MS;
     @Override
     public String generateToken(UserPrincipal auth){
-        String authorities = auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
-        return Jwts.builder()
-                .setSubject(auth.getUsername())
-                .claim("roles", authorities)
-                .claim("userId", auth.getId())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_IN_MS))
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
-                .compact();
-    }
+            String authorities = auth.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(","));
+            return Jwts.builder()
+                    .setSubject(auth.getUsername())
+                    .claim("roles", authorities)
+                    .claim("userId", auth.getId())
+                    .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_IN_MS))
+                    .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                    .compact();
+        }
     @Override
     public Authentication getAuthentication(HttpServletRequest request) {
         Claims claims = extractClaims(request);
