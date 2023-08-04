@@ -1,7 +1,9 @@
 package com.bookstore.bookstoreapplication.security;
 
+import com.bookstore.bookstoreapplication.models.Role;
 import com.bookstore.bookstoreapplication.security.JWT.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value("${authentication.internal-api-key}")
+    public String internalApiKey;
     @Autowired
     private CustomUserDetailsService userDetailsService;
     @Override
@@ -34,11 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers("/api/authentication/**").permitAll()
+                .antMatchers("/api/internal/**").hasRole(Role.SYSTEM_MANAGER.name())
                 .anyRequest().authenticated();
 
         //jwt filter
         //internal > jwt > authentication
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(internalApiAuthenticationFilter(), JwtAuthorizationFilter.class);
     }
 
     @Override
@@ -64,5 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .allowedMethods("*");
             }
         };
+    }
+    @Bean
+    public InternalApiAuthenticationFilter internalApiAuthenticationFilter(){
+        return new InternalApiAuthenticationFilter(internalApiKey);
     }
 }

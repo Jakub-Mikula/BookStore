@@ -1,6 +1,8 @@
 package com.bookstore.bookstoreapplication.security;
 
+import com.bookstore.bookstoreapplication.models.Role;
 import com.bookstore.bookstoreapplication.models.User;
+import com.bookstore.bookstoreapplication.util.SecurityUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +22,15 @@ public class UserPrincipal implements UserDetails {
     transient private String password; //transient means that it does not show up
     transient private User user; //user for only login operation, do not use in JWToken.
     private Set<GrantedAuthority> authorities;
+
+    public static UserPrincipal createSuperUser(){
+        Set<GrantedAuthority> authorities = Set.of(SecurityUtils.convertToAuthority(Role.SYSTEM_MANAGER.name()));
+        return UserPrincipal.builder()
+                .id(-1)
+                .username("system-administrator")
+                .authorities(authorities)
+                .build();
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

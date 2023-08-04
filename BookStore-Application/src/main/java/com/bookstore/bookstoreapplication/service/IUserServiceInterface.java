@@ -10,6 +10,7 @@ public interface IUserServiceInterface {
 
     Optional<User> findByUsername(String username);
 
+
     @Transactional
-    void makeAdminFromUser(String username);
+    void makeAdmin(String username);
 }

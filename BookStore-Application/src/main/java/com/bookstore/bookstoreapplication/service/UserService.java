@@ -32,7 +32,7 @@ public class UserService implements IUserServiceInterface{
     }
     @Override
     @Transactional
-    public void makeAdminFromUser(String username){
+    public void makeAdmin(String username){
 
         userRepository.updateUserRole(username, Role.ADMIN);
     }
