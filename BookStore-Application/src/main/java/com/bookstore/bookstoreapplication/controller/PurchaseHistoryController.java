@@ -20,7 +20,7 @@ public class PurchaseHistoryController {
         return  new ResponseEntity<>(purchaseService.savePurchaseHistory(purchaseHistory), HttpStatus.OK);
     }
 
-    @GetMapping("{userId}")
+    @GetMapping()
     public ResponseEntity<?> getAllUserPurchases(@AuthenticationPrincipal UserPrincipal principal){
         return  ResponseEntity.ok(purchaseService.findAllPurchasesOfUser(principal.getId()));
     }
